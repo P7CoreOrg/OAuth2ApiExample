@@ -32,10 +32,10 @@ steps:
   inputs:
     restoreSolution: '$(solution)'
 
-- task: DotNetCoreCLI@2
-  inputs:
-    command: 'build'
-    arguments: '--configuration $(BuildConfiguration) /p:AssemblyVersion=$(Build.BuildNumber)'
+- script: dotnet build --configuration $(buildConfiguration) ./src/SecuredApiApp.sln /p:AssemblyVersion=$(Build.BuildNumber)
+  displayName: 'dotnet build $(buildConfiguration)'
+  
+ 
 
 - task: DotNetCoreCLI@2
   inputs:
