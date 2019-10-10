@@ -22,8 +22,10 @@ variables:
 steps:
 
 - task: PowerShell@2
+  displayName: Docker - Build
   inputs:
     filePath: './src/build-docker.ps1'
+
 - task: PowerShell@2
   displayName: Where Am I
   inputs:
@@ -33,7 +35,7 @@ steps:
       write-host Build.ArtifactStagingDirectory:$(Build.ArtifactStagingDirectory)
       write-host System.DefaultWorkingDirectory:$(System.DefaultWorkingDirectory)
       write-host Build.BuildNumber:$(Build.BuildNumber)
-      
+
 
 - task: Bash@3
   inputs:
@@ -64,3 +66,5 @@ steps:
 - script: dotnet build --configuration $(buildConfiguration) ./src/SecuredApiApp.sln 
   displayName: 'dotnet test $(buildConfiguration)'
 
+  - script: dotnet publish --configuration $(buildConfiguration) ./src/SecuredApiApp.sln 
+  displayName: 'dotnet publish $(buildConfiguration)'
