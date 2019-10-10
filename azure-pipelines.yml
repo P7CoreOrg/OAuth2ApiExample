@@ -23,9 +23,10 @@ steps:
 - powershell: write-host System.DefaultWorkingDirectory:$(System.DefaultWorkingDirectory)
   displayName: Artifact Locations
 - powershell: write-host Build.BuildNumber:$(Build.BuildNumber)
-  displayName: Build.BuildNumber
--powershell : |
-  $(version) = "1."+$(Build.BuildNumber)
+  displayName: Build.BuildNumber 
+
+- powershell : |
+    $(version) = "1."+$(Build.BuildNumber)
   displayName: Setup dynamic variables
 
 - task: UseDotNet@2
