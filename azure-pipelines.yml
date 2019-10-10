@@ -13,20 +13,9 @@ variables:
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  buildNumber: '0.0.0.0'
+  buildNumber: '1.2.3.4'
 
 steps:
-
-- task: PowerShell@2
-  inputs:
-    targetType: 'inline'
-    script: |
-      Write-Host "Generating Build Number"
-      $baseDate = [datetime]"01/01/2000"
-      $currentDate = $(Get-Date)
-      $interval = NEW-TIMESPAN –Start $baseDate –End $currentDate
-      $years = $interval.Years
-      Write-Host "##vso[task.setvariable variable=buildNumber]1.$years.$(DayOfYear).$(Rev:r)"
 
 - powershell: ls 
   displayName: Where Am I
@@ -58,7 +47,7 @@ steps:
   inputs:
     restoreSolution: '$(solution)'
 
-- script: dotnet build --configuration $(buildConfiguration) ./src/SecuredApiApp.sln /p:Version=$(buildNumber)
+- script: dotnet build --configuration $(buildConfiguration) ./src/SecuredApiApp.sln /p:Version=1.$(Date:yy).$(DayOfYear).$(Rev:r)
   displayName: 'dotnet build $(buildConfiguration)'
   
 - script: dotnet build --configuration $(buildConfiguration) ./src/SecuredApiApp.sln 
