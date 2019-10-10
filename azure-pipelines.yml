@@ -21,12 +21,19 @@ variables:
 
 steps:
 
-- powershell: ls 
+- task: PowerShell@2
+  inputs:
+    filePath: './src/build-docker.ps1'
+- task: PowerShell@2
   displayName: Where Am I
-- powershell: write-host Build.ArtifactStagingDirectory:$(Build.ArtifactStagingDirectory)
-  displayName: Artifact Locations
-- powershell: write-host System.DefaultWorkingDirectory:$(System.DefaultWorkingDirectory)
-  displayName: Artifact Locations
+  inputs:
+    targetType: 'inline'
+    script: |
+      ls
+      write-host Build.ArtifactStagingDirectory:$(Build.ArtifactStagingDirectory)
+      write-host System.DefaultWorkingDirectory:$(System.DefaultWorkingDirectory)
+      write-host Build.BuildNumber:$(Build.BuildNumber)
+      
 
 - task: Bash@3
   inputs:
