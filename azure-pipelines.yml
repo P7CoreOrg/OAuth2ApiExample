@@ -13,7 +13,7 @@ variables:
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  version: '0.0.0'
+  version: '1.$(Build.BuildNumber)'
 
 steps:
 - powershell: ls 
@@ -22,12 +22,11 @@ steps:
   displayName: Artifact Locations
 - powershell: write-host System.DefaultWorkingDirectory:$(System.DefaultWorkingDirectory)
   displayName: Artifact Locations
-- powershell: write-host Build.BuildNumber:$(Build.BuildNumber)
+- powershell: | 
+    write-host Build.BuildNumber:$(Build.BuildNumber) |
+    write-host version:$(version)
   displayName: Build.BuildNumber 
 
-- powershell : |
-    $(version) = "1$(Build.BuildNumber)"
-  displayName: Setup dynamic variables
 
 - task: UseDotNet@2
   displayName: 'Use dotnet sdk 2.x'
