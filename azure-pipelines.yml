@@ -13,9 +13,16 @@ variables:
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  buildNumber: '1.$(Date:yyyy).$(DayOfYear).$(Rev:r)'
+  buildNumber: '0.0.0.0'
 
 steps:
+
+- task: PowerShell@2
+  inputs:
+    targetType: 'inline'
+    script: |
+      Write-Host "Generating Build Number"
+      Write-Host "##vso[task.setvariable variable=buildNumber]1.$(Date:yyyy).$(Date:yyyy).$(Rev:r)"
 
 - powershell: ls 
   displayName: Where Am I
