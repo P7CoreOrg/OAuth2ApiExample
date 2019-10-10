@@ -3,7 +3,7 @@
 # Add steps that publish symbols, save build artifacts, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
 
-name: $(Build.DefinitionName)-$(date:yyyy)$(rev:.r)
+name: 1.$(date:yyyy)$(DayOfYear)$(rev:.r)
 
 trigger:
 - master
