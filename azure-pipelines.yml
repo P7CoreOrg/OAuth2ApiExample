@@ -16,9 +16,9 @@ variables:
 
 steps:
 - task: UseDotNet@2
-  displayName: 'Use dotnet sdk 2.2.x'
+  displayName: 'Use dotnet sdk 2.x'
   inputs:
-    version: 2.2.x
+    version: 2.x
     includePreviewVersions: false
 
 - task: NuGetToolInstaller@1
