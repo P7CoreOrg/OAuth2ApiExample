@@ -16,6 +16,18 @@ variables:
   assemblyVersion: '1.0.$(Build.BuildNumber)'
 
 steps:
+- task: PowerShell@2
+  inputs:
+    targetType: 'inline'
+    script: |
+      Write-Host "Generating Build Number"
+      $baseDate = [datetime]"01/01/2000"
+      $currentDate = $(Get-Date)
+      $interval = NEW-TIMESPAN –Start $baseDate –End $currentDate
+      $days = $interval.Days
+      
+      Write-Host "##vso[task.setvariable variable=buildNumber]10.0.$days.1024"
+
 - powershell: ls 
   displayName: Where Am I
 - powershell: write-host Build.ArtifactStagingDirectory:$(Build.ArtifactStagingDirectory)
@@ -47,7 +59,7 @@ steps:
   inputs:
     restoreSolution: '$(solution)'
 
-- script: dotnet build --configuration $(buildConfiguration) ./src/SecuredApiApp.sln /p:AssemblyVersion=$(assemblyVersion)
+- script: dotnet build --configuration $(buildConfiguration) ./src/SecuredApiApp.sln /p:AssemblyVersion=$(buildNumber)
   displayName: 'dotnet build $(buildConfiguration)'
   
  
