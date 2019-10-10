@@ -13,7 +13,7 @@ variables:
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  version: '1.$(Build.BuildNumber)'
+  version: '1.0.$(Build.BuildNumber)'
 
 steps:
 - powershell: ls 
