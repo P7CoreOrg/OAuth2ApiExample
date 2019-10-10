@@ -8,6 +8,8 @@ Write-Host $version
 Write-Host "Script:" $PSCommandPath
 Write-Host "Path:" $PSScriptRoot
 
+Set-Location -Path  $PSScriptRoot
+
 function Run-Script
 {
 	param([string]$script)
