@@ -22,7 +22,11 @@ steps:
     targetType: 'inline'
     script: |
       Write-Host "Generating Build Number"
-      Write-Host "##vso[task.setvariable variable=buildNumber]1.$(Date:yyyy).$(Date:yyyy).$(Rev:r)"
+      $baseDate = [datetime]"01/01/2000"
+      $currentDate = $(Get-Date)
+      $interval = NEW-TIMESPAN –Start $baseDate –End $currentDate
+      $years = $interval.Years
+      Write-Host "##vso[task.setvariable variable=buildNumber]1.$years.$(DayOfYear).$(Rev:r)"
 
 - powershell: ls 
   displayName: Where Am I
