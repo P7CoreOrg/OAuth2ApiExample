@@ -1,7 +1,10 @@
 Param
 (
-$version
+    [string] $version,
+    [string] $acrName        = 'p7coredockerhub',
+    [string] $acrLoginServer = "p7coredockerhub.azurecr.io"
 )
+
 Write-Host $version
 
 
@@ -36,6 +39,7 @@ function Check {
     }
 }
 
+
 $DockerOS = docker version -f "{{ .Server.Os }}"
 write-host DockerOs:$DockerOS 
 $BaseBuildImageName = "oauth2apiexample/base-build"
@@ -44,9 +48,38 @@ $Dockerfile = "Dockerfile"
 PrintElapsedTime
 
 Log "Build application image"
-docker build --no-cache --pull -t $BaseBuildImageName -f $PSScriptRoot/$Dockerfile --build-arg Version=$version .
+# docker build --no-cache --pull -t $BaseBuildImageName -f $PSScriptRoot/$Dockerfile --build-arg Version=$version .
 PrintElapsedTime
 Check "docker build (application)"
 
-docker build -f ./SecuredApiApp3/Dockerfile -t oauth2apiexample/secured-api-app3 .
-docker build -f ./SecuredApiApp22/Dockerfile -t oauth2apiexample/secured-api-app22 .
+function DockerBuild {
+    Param 
+    (
+        [string] $dockerFile,
+        [string] $localRepo,
+        [string] $imageName,
+        [string] $version,
+        [string] $acrLoginServer
+    )
+
+    $latestDockerImage = "$($localRepo)/$($imageName):latest"
+    docker build -f $dockerFile  -t $latestDockerImage .
+    $versionDockerImage = "$($localRepo)/$($imageName):$($version)"
+    docker tag $dockerImage $versionDockerImage
+
+    $acrLoginServerLatestDockerImage  = "$($acrLoginServer)/$($imageName):latest"
+    $acrLoginServerVersionDockerImage = "$($acrLoginServer)/$($imageName):$($version)"
+    
+    docker tag $latestDockerImage $acrLoginServerLatestDockerImage
+    docker tag $latestDockerImage $acrLoginServerVersionDockerImage
+
+    docker push $acrLoginServerLatestDockerImage
+    docker push $acrLoginServerVersionDockerImage
+}
+
+az acr login --name $acrName
+DockerBuild -dockerFile "./SecuredApiApp22/Dockerfile" -localRepo "oauth2apiexample" -imageName "secured-api-app22" -version $version -acrLoginServer $acrLoginServer
+DockerBuild -dockerFile "./SecuredApiApp3/Dockerfile"  -localRepo "oauth2apiexample" -imageName  "secured-api-app3" -version $version -acrLoginServer $acrLoginServer
+
+docker images  oauth2apiexample/*
+
