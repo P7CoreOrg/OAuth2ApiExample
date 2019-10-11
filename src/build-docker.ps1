@@ -48,7 +48,7 @@ $Dockerfile = "Dockerfile"
 PrintElapsedTime
 
 Log "Build application image"
-# docker build --no-cache --pull -t $BaseBuildImageName -f $PSScriptRoot/$Dockerfile --build-arg Version=$version .
+docker build --no-cache --pull -t $BaseBuildImageName -f $PSScriptRoot/$Dockerfile --build-arg Version=$version .
 PrintElapsedTime
 Check "docker build (application)"
 
